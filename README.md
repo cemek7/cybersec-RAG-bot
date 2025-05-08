@@ -96,7 +96,7 @@ Example payload:
 - TinyLlama 1.1B (CPU) – for low-latency refinement locally  
 - Remote LLMs via Colab (e.g., Mistral/Mixtral) – for main generation
 
-Configure your cloud LLM endpoint inside \`llm_colab_client.py\`.
+Configure your cloud LLM endpoint inside `llm_colab_client.py`.
 
 ---
 
@@ -104,7 +104,7 @@ Configure your cloud LLM endpoint inside \`llm_colab_client.py\`.
 
 - 🔧 Plug in your own embedding models or vector DBs  
 - 🔌 Add new sources (e.g., RSS feeds, CVE feeds, GitHub orgs)  
-- 🧪 Customize prompts in \`prompt_engine.py\`  
+- 🧪 Customize prompts in `prompt_engine.py`  
 - 🔍 Enable metadata filters for domain-specific answers
 
 ---
@@ -134,13 +134,13 @@ Configure your cloud LLM endpoint inside \`llm_colab_client.py\`.
 
 ## 👨‍💻 Maintainer
 
-**Your Name** – [yourwebsite.com](https://yourwebsite.com)  
+**christopher ozougwu** – [yourwebsite.com](https://yourwebsite.com)  
 Built with ❤️ for security researchers, red teamers, and AI hobbyists.
 
 ---
 
 ## 📄 License
 
-MIT License. See the \`LICENSE\` file for full details.
+MIT License. See the `LICENSE` file for full details.
 
 
