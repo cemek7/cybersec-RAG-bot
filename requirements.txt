@@ -1,0 +1,46 @@
+# Core ingestion
+python-docx
+PyMuPDF
+markdown2
+beautifulsoup4
+requests
+markdown
+langchain
+langchain-community
+numpy==1.26.4
+
+# Use +cpu if needed, with the extra index URL
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.1+cpu
+torchvision==0.17.1+cpu
+
+# Vector DB
+chromadb==0.4.24
+
+# Embeddings
+sentence-transformers
+# instructor-embedding  # Uncomment if switching to InstructorEmbedding
+
+# LLM interaction
+openai
+tqdm
+
+# Dynamic prompts
+jinja2
+
+# Server
+fastapi
+uvicorn
+
+# Async HTTP
+httpx
+
+# Local config/util
+python-dotenv
+pydantic
+
+# Optional scraping
+lxml
+
+# Jupyter support
+notebook
