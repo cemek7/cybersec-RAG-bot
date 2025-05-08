@@ -46,7 +46,7 @@ cybersec-rag/
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/cybersec-rag.git
+git clone https://github.com/cemek7/cybersec-RAG-bot.git
 cd cybersec-rag
 ```
 
@@ -113,10 +113,10 @@ Configure your cloud LLM endpoint inside \`llm_colab_client.py\`.
 
 - `fastapi`, `uvicorn`  
 - `langchain`, `sentence-transformers`  
-- \`chromadb\`  
-- \`PyMuPDF\`, \`python-docx\`, \`markdown\`, \`beautifulsoup4\`  
-- \`llama-cpp-python\` *(for local inference)*  
-- \`aiohttp\`, \`pydantic\`, \`tqdm\`
+- `chromadb`  
+- `PyMuPDF`, `python-docx`, `markdown`, `beautifulsoup4`  
+- `llama-cpp-python` *(for local inference)*  
+- `aiohttp`, `pydantic`, `tqdm`
 
 ---
 
