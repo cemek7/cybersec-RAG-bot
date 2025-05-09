@@ -1,18 +1,16 @@
-# === File: app/prompts/prompt_engine.py ===
-
 from typing import List, Optional
 
 class PromptEngine:
     def __init__(self, mini_llm=None):
-        self.mini_llm = mini_llm  # Optional local LLM for refining prompts
+        self.mini_llm = mini_llm  # Optional tiny model to assist refinement
 
     def build_config(
         self,
-        intent: str,
-        audience: str,
-        format: str,
-        style: str,
-        doc_type: str
+        intent: str = "inform",
+        audience: str = "cybersecurity analyst",
+        format: str = "markdown",
+        style: str = "clear",
+        doc_type: str = "technical"
     ) -> dict:
         return {
             "intent": intent,
@@ -29,13 +27,7 @@ class PromptEngine:
         config: Optional[dict] = None
     ) -> str:
         if not config:
-            config = self.build_config(
-                intent="general",
-                audience="cybersecurity analyst",
-                format="detailed",
-                style="clear",
-                doc_type="mixed"
-            )
+            config = self.build_config()
 
         system_prompt = f"""
 You are a helpful cybersecurity assistant.
@@ -63,4 +55,12 @@ If the context is lacking, use your best reasoning without fabricating informati
     def generate_follow_up_questions(self, answer: str) -> List[str]:
         if self.mini_llm:
             return self.mini_llm.suggest_follow_ups(answer)
-        return []  # fallback if no local model is present
+        return []
+
+    def refine_prompt_with_context(
+        self, raw_prompt: str, context_chunks: List[str]
+    ) -> str:
+        context_text = "\n\n".join(context_chunks[:3])
+        if self.mini_llm:
+            return self.mini_llm.enhance_prompt_with_context(raw_prompt, context_text)
+        return f"{raw_prompt}\n\nContext:\n{context_text}"

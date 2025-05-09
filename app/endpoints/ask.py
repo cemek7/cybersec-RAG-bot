@@ -1,19 +1,21 @@
-# === app/api/endpoints/ask.py ===
+# app/api/endpoints/ask.py
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
-from app.prompts.prompt_engine import PromptEngine
-from app.vectorstore.search import fetch_relevant_chunks
-from app.llm_client.colab_llm import query_llm
-from app.utils.qa_history import log_qa_interaction
+from app.rag.rag_pipeline import RAGPipeline
+from app.utils.qa_history import load_history
 
 router = APIRouter()
-prompt_engine = PromptEngine()
+pipeline = RAGPipeline()
 
 class AskRequest(BaseModel):
     query: str
-    config: dict = None  # Example: intent, audience, format, style, doc_type
+    output_format: str = "markdown"  # Optional field with default
+    intent: str = "inform"
+    audience: str = "security engineer"
+    style: str = "clear"
+    doc_type: str = "technical"
 
 class AskResponse(BaseModel):
     answer: str
@@ -22,46 +24,19 @@ class AskResponse(BaseModel):
     follow_ups: List[str]
 
 @router.post("/ask", response_model=AskResponse)
-async def ask_question(data: AskRequest, request: Request):
+async def ask_question(data: AskRequest):
     try:
-        # Fetch relevant chunks from the vectorstore
-        chunks = fetch_relevant_chunks(data.query)
-        if not chunks:
-            raise HTTPException(status_code=404, detail="No relevant context found.")
-
-        context_chunks = [c.page_content for c in chunks]
-        sources = [
-            f"{c.metadata.get('source')} ({c.metadata.get('type')})"
-            for c in chunks
-        ]
-
-        # Generate a structured prompt using PromptEngine
-        prompt = prompt_engine.generate_base_prompt(
-            query=data.query,
-            context_chunks=context_chunks,
-            config=data.config
-        )
-
-        # Query the LLM with the generated prompt
-        answer = query_llm(prompt)
-
-        # Generate possible follow-up questions
-        follow_ups = prompt_engine.generate_follow_up_questions(answer)
-
-        # Log the Q&A interaction into qa_history.json
-        log_qa_interaction(
-            query=data.query,
-            prompt=prompt,
-            answer=answer,
-            follow_ups=follow_ups,
-            sources=sources
-        )
-
+        result = pipeline.generate_answer(data.query, output_format=data.output_format)
         return AskResponse(
-            answer=answer,
-            final_prompt=prompt,
-            sources=sources,
-            follow_ups=follow_ups
+            answer=result["answer"],
+            final_prompt=result["prompt"],
+            sources=result["sources"],
+            follow_ups=result["follow_up_questions"]
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/history")
+def get_history():
+    
+    return load_history()
